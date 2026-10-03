@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pan Fellowship Preview</title>
+<style>
+/* Layout: one quiet card on Pan's own sage ground, pointing into the draft site. */
+:root{
+  --ground:#D0DDD4; --card:#E0E7E2; --ink:#1E2622; --ink-soft:#3F4843;
+  --pine:#264D3F; --rule:#C3D2C8; --on-pine:#F2F5F3;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --ground:#18201C; --card:#222C27; --ink:#E4EBE6; --ink-soft:#B4C0B8;
+  --pine:#8FC2AA; --rule:#34423B; --on-pine:#10241C; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --ground:#18201C; --card:#222C27; --ink:#E4EBE6; --ink-soft:#B4C0B8;
+  --pine:#8FC2AA; --rule:#34423B; --on-pine:#10241C; color-scheme:dark;}
+body{background:var(--ground);color:var(--ink);font-family:var(--serif);font-size:19px;line-height:1.65;padding-inline:16px;padding-block:3rem}
+main{max-width:34rem;margin:0 auto;background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:2rem 1.8rem;display:grid;gap:1rem}
+.eyebrow{font-family:var(--sans);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin:0}
+h1{font-weight:normal;font-size:2rem;line-height:1.2;margin:0;text-wrap:balance}
+p{margin:0}
+.go{justify-self:start;font-family:var(--sans);font-size:1rem;background:var(--pine);color:var(--on-pine);text-decoration:none;padding:.75rem 1.4rem;border-radius:4px}
+.go:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+ul{margin:0;padding-left:1.2rem;color:var(--ink-soft)}
+.note{font-size:.9rem;color:var(--ink-soft);border-top:1px solid var(--rule);padding-top:1rem}
+</style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">Draft for comment · panfellowshipgroup.org</p>
+  <h1>The new Pan Fellowship website</h1>
+  <p>This is an early draft of the new Pan site. It is not live yet. Please look around and tell me what you think: what reads well, what is unclear, and what is missing.</p>
+  <a class="go" href="home.html">Open the draft site</a>
+  <p>Things worth a look:</p>
+  <ul>
+    <li>Does the home page make a newcomer feel welcome?</li>
+    <li>Are the meeting times and how to join clear?</li>
+    <li>Is anything said that a Pan member would not say?</li>
+  </ul>
+  <p class="note">This is a preview, so the forms do not send and the PDF downloads are not attached yet. Please send your comments straight back to Jamie.</p>
+</main>
+</body>
+</html>

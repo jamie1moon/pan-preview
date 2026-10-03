@@ -1,0 +1,239 @@
+/* Pan Fellowship — mock-up v1 (Cairn, 10 Aug 2026)
+   Self-contained: no external fonts, no CDNs, no trackers, no motion.
+   Palette and type set once here; every page inherits. */
+
+:root{
+  --parchment:#D0DDD4;
+  --parchment-deep:#C3D3C8;
+  --ink:#1E2622;
+  --ink-soft:#3F4843;
+  --ink-faint:#3F4744;
+  --pine:#264D3F;
+  --pine-deep:#1C4034;
+  --pine-tint:#C9D7CF;
+  --copper:#254A5C;
+  --copper-soft:#DEE5E9;
+  --rule:#C3D2C8;
+  --card:#E0E7E2;
+  --measure:34rem;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--parchment);
+  color:var(--ink);
+  font-family:var(--serif);
+  font-size:19px;
+  line-height:1.65;
+}
+img,svg{max-width:100%}
+a{color:var(--pine);text-underline-offset:3px;text-decoration-thickness:1px}
+a:hover{color:var(--copper)}
+
+.wrap{max-width:68rem;margin:0 auto;padding:0 1.6rem}
+.prose{max-width:var(--measure)}
+
+/* ---------- header ---------- */
+.site-head{
+  background:var(--parchment);
+  border-bottom:1px solid var(--rule);
+  position:sticky;top:0;z-index:20;
+}
+.site-head .wrap{display:flex;align-items:center;gap:1.4rem;min-height:104px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:.75rem;text-decoration:none;color:var(--ink);font-weight:600;
+  font-size:1.72rem;letter-spacing:.005em;margin-right:auto}
+.brand:hover{color:var(--ink)}
+.brand .mark{width:72px;height:72px;flex:0 0 72px}
+nav.main{display:flex;align-items:center;gap:1.35rem;font-family:var(--sans);font-size:.9rem;flex-wrap:wrap}
+nav.main a{color:var(--ink-soft);text-decoration:none}
+nav.main a:hover,nav.main a[aria-current]{color:var(--pine);text-decoration:underline}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-block;font-family:var(--sans);font-size:.94rem;font-weight:600;
+  padding:.72em 1.4em;border-radius:999px;text-decoration:none;border:1.5px solid transparent;
+}
+.btn-primary{background:var(--copper);color:#fff;border-color:var(--copper)}
+.btn-primary:hover{background:#2A5468;color:#fff}
+.btn-quiet{background:transparent;color:var(--pine);border-color:var(--pine)}
+.btn-quiet:hover{background:var(--pine-tint);color:var(--pine-deep)}
+.btn-on-dark{background:transparent;color:#fff;border-color:rgba(255,255,255,.70)}
+.btn-on-dark:hover{background:rgba(255,255,255,.12);color:#fff}
+
+/* ---------- hero ---------- */
+.hero{background:var(--pine-deep);color:#fff;position:relative;overflow:hidden}
+.hero .wrap{position:relative;z-index:2;padding-top:5.5rem;padding-bottom:5rem}
+.hero .glyph{position:absolute;right:-4rem;top:50%;transform:translateY(-50%);
+  width:min(30rem,55vw);opacity:.10;z-index:1;pointer-events:none}
+.eyebrow{font-family:var(--sans);font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(255,255,255,.80);margin:0 0 1.1rem}
+.hero h1{font-size:clamp(2.6rem,6.4vw,4.4rem);line-height:1.03;margin:0 0 1.3rem;font-weight:600;letter-spacing:-.015em}
+.hero p.lede{font-size:1.16rem;line-height:1.6;max-width:33rem;color:rgba(255,255,255,.9);margin:0 0 2.2rem}
+.hero .actions{display:flex;gap:.9rem;flex-wrap:wrap}
+
+/* ---------- next-meeting card ---------- */
+.card-meeting{
+  background:var(--card);border:1px solid var(--rule);border-radius:14px;
+  padding:1.7rem 1.9rem;margin:-3.2rem auto 0;position:relative;z-index:5;
+  box-shadow:0 12px 34px rgba(21,52,41,.13);
+  display:flex;gap:1.6rem;align-items:center;flex-wrap:wrap;
+}
+.card-meeting .body{flex:1 1 22rem;min-width:16rem}
+.tag{display:inline-block;font-family:var(--sans);font-size:0.78rem;letter-spacing:.14em;text-transform:uppercase;
+  background:var(--pine-tint);color:var(--pine-deep);padding:.32em .8em;border-radius:999px;margin-bottom:.7rem}
+.card-meeting h2{margin:0 0 .35rem;font-size:1.45rem;font-weight:600}
+.card-meeting .when{font-family:var(--sans);font-size:.95rem;color:var(--copper);font-weight:600;margin:0 0 .5rem}
+.card-meeting p{margin:0;color:var(--ink-soft);font-size:1rem}
+
+/* ---------- sections ---------- */
+section{padding:4.5rem 0}
+section.tight{padding:3.2rem 0}
+section.tinted{background:var(--parchment-deep)}
+section.dark{background:var(--pine-deep);color:#fff}
+section.dark h2,section.dark h3{color:#fff}
+/* GUARD: a plain link dropped into a dark section would otherwise inherit the light-ground
+   link colour and render at ~1.19:1. No such link exists today — this is so one cannot be
+   added by accident. (round-5 check, 7 Sep 2026) */
+section.dark a:not(.btn){color:#fff;text-decoration:underline;text-underline-offset:.18em}
+section.dark a:not(.btn):hover{color:rgba(255,255,255,.85)}
+section.dark p{color:rgba(255,255,255,.86)}
+.section-head{margin-bottom:2.6rem;max-width:var(--measure)}
+.section-head .kicker{font-family:var(--sans);font-size:0.78rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--copper);margin:0 0 .7rem}
+h1,h2,h3{letter-spacing:-.012em}
+h2{font-size:clamp(1.75rem,3.2vw,2.35rem);font-weight:600;margin:0 0 .8rem;line-height:1.15}
+h3{font-size:1.22rem;font-weight:600;margin:0 0 .5rem}
+p{margin:0 0 1.1rem}
+.lead{font-size:1.12rem;color:var(--ink-soft)}
+
+/* page banner (non-home pages) */
+.page-head{background:var(--pine-tint);border-bottom:1px solid var(--rule);padding:3.4rem 0 3rem}
+.page-head h1{font-size:clamp(2.1rem,4.6vw,3rem);margin:0 0 .8rem;font-weight:600;line-height:1.1}
+.page-head p{font-size:1.12rem;color:var(--ink-soft);max-width:var(--measure);margin:0}
+
+/* ---------- grids ---------- */
+.grid{display:grid;gap:1.5rem}
+.g3{grid-template-columns:repeat(auto-fit,minmax(15.5rem,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(19rem,1fr))}
+.panel{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:1.7rem}
+section.tinted .panel{background:var(--card)}
+section.dark .panel{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.16)}
+.panel p:last-child{margin-bottom:0}
+.panel .icon{width:34px;height:34px;margin-bottom:1rem;display:block}
+
+/* numbered steps */
+ol.steps{list-style:none;counter-reset:s;padding:0;margin:0;display:grid;gap:1.3rem}
+ol.steps li{counter-increment:s;display:flex;gap:1.1rem;align-items:flex-start}
+ol.steps li::before{
+  content:counter(s);flex:0 0 2.2rem;height:2.2rem;border-radius:50%;
+  background:var(--copper-soft);color:var(--copper);border:1px solid #C4D8E0;
+  font-family:var(--sans);font-size:.9rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;margin-top:.15rem;
+}
+ol.steps li h3{margin:.1rem 0 .3rem}
+ol.steps li p{margin:0;color:var(--ink-soft);font-size:1rem}
+
+/* Q&A */
+.qa{border-top:1px solid var(--rule);padding:1.4rem 0}
+.qa:last-of-type{border-bottom:1px solid var(--rule)}
+.qa h3{margin:0 0 .4rem;font-style:italic;color:var(--pine-deep)}
+.qa p{margin:0;color:var(--ink-soft);font-size:1.03rem}
+
+/* meeting blocks */
+.meeting{display:flex;gap:1.8rem;flex-wrap:wrap;align-items:flex-start;
+  background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:1.9rem;margin-bottom:1.4rem}
+.meeting .when-col{flex:0 0 12rem}
+.meeting .when-col .day{font-size:1.5rem;font-weight:600;display:block;margin-bottom:.15rem}
+.meeting .when-col .time{font-family:var(--sans);font-size:.95rem;color:var(--copper);font-weight:600;display:block}
+.meeting .when-col .place{font-family:var(--sans);font-size:.85rem;color:var(--ink-faint);display:block;margin-top:.3rem}
+.meeting .detail{flex:1 1 20rem}
+.meeting .detail p:last-child{margin-bottom:0}
+
+/* tables */
+table{width:100%;border-collapse:collapse;font-size:1rem;margin:0 0 1.2rem}
+th,td{text-align:left;padding:.72rem .8rem;border-bottom:1px solid var(--rule)}
+th{font-family:var(--sans);font-size:0.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:600}
+tbody tr:hover{background:var(--parchment-deep)}
+
+/* books */
+.book{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:1.5rem;display:flex;flex-direction:column}
+.book .cover{background:var(--pine-tint);border:1px solid var(--rule);border-radius:6px;aspect-ratio:2/3;
+  display:flex;align-items:center;justify-content:center;text-align:center;padding:1rem;margin-bottom:1.1rem;
+  font-size:.95rem;color:var(--pine-deep);line-height:1.35}
+.book h3{margin-bottom:.35rem}
+.book p{font-size:.97rem;color:var(--ink-soft);flex:1}
+.price{font-family:var(--sans);font-size:.86rem;color:var(--ink-faint);margin:.4rem 0 1rem}
+
+/* to-be-set marker — visible in mock-up, greppable before launch */
+.tbd{font-family:var(--sans);font-size:0.78rem;font-weight:600;letter-spacing:.06em;
+  background:var(--copper-soft);color:#254A5C;border:1px dashed #B9D0DB;
+  padding:.2em .6em;border-radius:4px;white-space:nowrap;display:inline-block}
+/* honest omission — a quiet, calm gap, NOT an amber placeholder box (Pan, 2 Sep 2026:
+   "render those as honest omissions, not amber holes"). No border, no fill, just muted. */
+.pending{color:var(--ink-faint);font-style:italic}
+
+/* callout */
+.callout{background:var(--copper-soft);border-left:3px solid var(--copper);border-radius:0 8px 8px 0;
+  padding:1.4rem 1.6rem;margin:2rem 0}
+.callout p:last-child{margin-bottom:0}
+
+/* closing band */
+.closing{text-align:center}
+.closing .wrap{max-width:40rem}
+.closing h2{margin-bottom:1rem}
+.closing p{font-size:1.12rem;margin-bottom:1.9rem}
+
+/* ---------- footer ---------- */
+footer.site-foot{background:var(--pine-deep);color:rgba(255,255,255,.78);padding:3.4rem 0 2.6rem;font-size:.95rem}
+footer.site-foot a{color:#fff;text-decoration:none}
+footer.site-foot a:hover{text-decoration:underline}
+.foot-grid{display:grid;gap:2rem;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));margin-bottom:2.4rem}
+.foot-grid h4{font-family:var(--sans);font-size:0.78rem;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(255,255,255,.70);margin:0 0 .9rem;font-weight:600}
+.foot-grid ul{list-style:none;margin:0;padding:0}
+.foot-grid li{margin-bottom:.5rem}
+.foot-brand{display:flex;align-items:center;gap:.85rem;color:#fff;font-weight:600;font-size:1.45rem;margin-bottom:.8rem}
+.foot-brand .mark{width:64px;height:64px;flex:0 0 64px}
+.foot-bottom{border-top:1px solid rgba(255,255,255,.16);padding-top:1.5rem;
+  display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-size:.88rem;color:rgba(255,255,255,.68)}
+
+@media (max-width:640px){
+  body{font-size:18px}
+  .hero .wrap{padding-top:3.6rem;padding-bottom:3.6rem}
+  .brand .mark{width:56px;height:56px;flex:0 0 56px}
+  .brand{font-size:1.35rem}
+  .site-head .wrap{min-height:84px}
+  .hero .glyph{opacity:.07}
+  .card-meeting{margin-top:-2rem;padding:1.4rem}
+  section{padding:3.4rem 0}
+  .meeting .when-col{flex:1 1 100%}
+}
+
+/* == store_kit shelf CSS — managed by bin/store_kit.py, do not hand-edit == */
+.shelf{display:flex; flex-direction:column; gap:1rem;}
+.shelf-item{display:grid; grid-template-columns:1fr 230px; gap:1.5rem; align-items:start;
+  background:var(--card); border:1px solid var(--rule); border-radius:8px; padding:1.5rem;}
+.shelf-item h3{font-size:1.3rem; margin:0 0 .25rem; color:var(--pine);}
+.shelf-edition{font-family:Arial,Helvetica,sans-serif; font-size:0.78rem; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink-soft); margin:0 0 .7rem;}
+.shelf-blurb{margin:0; color:var(--ink-soft);}
+.shelf-buy{display:flex; flex-direction:column; gap:.7rem; align-items:stretch; text-align:center;}
+.shelf-price{font-size:1.15rem;}
+.shelf-state{font-family:Arial,Helvetica,sans-serif; font-size:0.78rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-soft); border:1px dashed var(--rule);
+  border-radius:4px; padding:.65rem .8rem;}
+.shelf-buy .buy-note{margin:0; text-align:left;}
+.btn-buy{width:100%; text-align:center;}
+.btn-buy[aria-disabled="true"]{background:var(--pine-tint); color:var(--ink-soft); border-color:var(--rule);
+  cursor:not-allowed; pointer-events:none;}  /* aria-disabled on an anchor is ADVISORY only;
+     this makes the switched-off buy button genuinely unclickable, so a real URL landing
+     in that href can never fire early. */
+.shelf-cover{float:left; width:96px; height:auto; margin:0 1.1rem .5rem 0; border-radius:3px;
+     box-shadow:0 2px 8px rgba(0,0,0,.25);}
+.buy-note{font-size:.85rem; color:var(--ink-soft); margin:.9rem 0 0;}
+@media (max-width:760px){ .shelf-item{grid-template-columns:1fr;} .shelf-buy{text-align:left;} }
+/* == end store_kit == */
