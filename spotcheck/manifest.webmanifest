@@ -1,0 +1,29 @@
+{
+  "name": "Spot Check Inventory",
+  "short_name": "Spot Check",
+  "description": "The four-step Tenth Step spot check: ask to have it removed, discuss it with someone immediately, make amends quickly, turn to someone we can help. Tap to call your People. Works offline; everything stays on this device.",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f6f3ec",
+  "theme_color": "#2f4858",
+  "icons": [
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

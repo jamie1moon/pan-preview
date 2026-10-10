@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#2f4858" />
+<title>Spot Check Inventory</title>
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="icon" href="icon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="Spot Check" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<style>
+  :root {
+    --ink: #23303a;
+    --deep: #2f4858;
+    --paper: #f6f3ec;
+    --card: #ffffff;
+    --line: #d9d2c4;
+    --accent: #6f8a99;
+    --accent-ink: #2f4858;
+    --chip: #eef2f4;
+    --chip-on: #2f4858;
+    --call: #2f6b4f;
+    --text-btn: #3f6d8c;
+    --now: #7a9a6b;
+    --later: #c9a24b;
+    --not: #a8a29a;
+    --banner: #8a5a2b;
+    --shadow: 0 1px 3px rgba(35,48,58,.12);
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 18px;
+    line-height: 1.45;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 18px 16px 72px; }
+  header h1 { font-size: 26px; margin: 2px 0 2px; color: var(--deep); letter-spacing: .2px; }
+  header p.tag { margin: 0 0 14px; font-size: 15.5px; color: var(--accent-ink); font-style: italic; opacity: .85; }
+
+  /* ---- nav ---- */
+  nav.tabs { display: flex; gap: 8px; margin: 0 0 16px; }
+  nav.tabs button {
+    flex: 1; font: inherit; font-size: 15.5px; font-weight: 600;
+    background: var(--card); color: var(--accent-ink);
+    border: 1.5px solid var(--line); border-radius: 11px; padding: 11px 6px; cursor: pointer;
+    position: relative;
+  }
+  nav.tabs button[aria-current="true"] { background: var(--deep); color: #fff; border-color: var(--deep); }
+  nav.tabs .count {
+    display: inline-block; min-width: 20px; margin-left: 5px; padding: 0 5px;
+    font-size: 13px; line-height: 19px; border-radius: 999px;
+    background: var(--banner); color: #fff; vertical-align: middle;
+  }
+  nav.tabs button[aria-current="true"] .count { background: #fff; color: var(--deep); }
+
+  /* ---- banner ---- */
+  .banner {
+    background: #fcefe0; border: 1.5px solid #e7c9a6; border-left: 5px solid var(--banner);
+    border-radius: 12px; padding: 13px 15px; margin: 0 0 16px; cursor: pointer;
+    color: #6b421c; font-size: 16.5px; font-weight: 600; box-shadow: var(--shadow);
+  }
+  .banner small { display: block; font-weight: 400; font-size: 14px; margin-top: 3px; opacity: .85; }
+
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 16px 15px; box-shadow: var(--shadow); margin-bottom: 15px;
+  }
+  label.field { display: block; font-weight: 600; font-size: 16.5px; color: var(--deep); margin: 14px 0 6px; }
+  label.field:first-of-type { margin-top: 0; }
+  .hint { font-size: 14px; color: #6b6357; margin: 0 0 8px; line-height: 1.4; }
+  textarea, input[type="text"], input[type="tel"] {
+    width: 100%; font: inherit; font-size: 18px; padding: 12px;
+    border: 1.5px solid var(--line); border-radius: 10px; background: #fdfcf9; color: var(--ink); resize: vertical;
+  }
+  textarea { min-height: 54px; }
+  textarea:focus, input:focus { outline: none; border-color: var(--accent); }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    border: 1.5px solid var(--line); background: var(--chip); color: var(--deep);
+    border-radius: 999px; padding: 10px 16px; font-size: 16px; cursor: pointer; user-select: none;
+    transition: background .12s, color .12s, border-color .12s;
+  }
+  .chip[aria-pressed="true"] { background: var(--chip-on); color: #fff; border-color: var(--chip-on); }
+
+  /* ---- step cards ---- */
+  .step { border-left: 5px solid var(--accent); }
+  .step .num { font-size: 13px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--accent); margin: 0 0 3px; }
+  .step h3 { font-size: 18.5px; color: var(--deep); margin: 0 0 8px; }
+  .prayer {
+    font-style: italic; color: #4a5a40; background: #f2f5ee; border: 1px solid #dde6d3;
+    border-radius: 10px; padding: 11px 13px; margin: 2px 0 10px; font-size: 16px;
+  }
+  .tick {
+    display: inline-flex; align-items: center; gap: 9px; font: inherit; font-size: 16px; font-weight: 600;
+    background: #f4f1ea; color: var(--deep); border: 1.5px solid var(--line);
+    border-radius: 10px; padding: 11px 15px; cursor: pointer; margin-top: 6px;
+  }
+  .tick .box {
+    width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--accent);
+    display: inline-flex; align-items: center; justify-content: center; font-size: 15px; color: #fff; background: transparent;
+  }
+  .tick[aria-pressed="true"] { background: #e8f0e9; border-color: var(--call); color: var(--call); }
+  .tick[aria-pressed="true"] .box { background: var(--call); border-color: var(--call); }
+
+  /* ---- contacts / call buttons ---- */
+  .calllist { margin: 4px 0 10px; }
+  .callrow { display: flex; gap: 8px; align-items: stretch; margin-bottom: 4px; }
+  a.call {
+    flex: 1.6; display: flex; flex-direction: column; justify-content: center;
+    text-decoration: none; background: var(--call); color: #fff; border-radius: 12px;
+    padding: 13px 15px; font-size: 18px; font-weight: 600; min-height: 60px;
+  }
+  a.call .pn { font-size: 14px; font-weight: 400; opacity: .9; margin-top: 2px; }
+  /* Text button: as big and tappable as Call, a clear sibling, not an afterthought */
+  a.sms {
+    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-decoration: none; background: var(--text-btn); color: #fff;
+    border-radius: 12px; padding: 13px 10px; font-size: 18px; font-weight: 600; min-height: 60px;
+  }
+  a.sms .sms-ico { font-size: 20px; line-height: 1; margin-bottom: 2px; }
+  .ctrls { display: flex; gap: 4px; }
+  .ctrls button {
+    font: inherit; font-size: 15px; background: #f4f1ea; color: var(--deep);
+    border: 1.5px solid var(--line); border-radius: 8px; width: 40px; height: 32px; cursor: pointer; padding: 0;
+  }
+  .ctrls button:disabled { opacity: .3; cursor: default; }
+  .contact-admin { display: flex; gap: 8px; margin-top: 4px; margin-bottom: 11px; flex-wrap: wrap; }
+  .contact-admin button {
+    font: inherit; font-size: 13.5px; background: transparent; color: var(--accent-ink);
+    border: 1.5px solid var(--line); border-radius: 8px; padding: 6px 11px; cursor: pointer;
+  }
+  .contact-admin button.rm { color: #b06a5f; }
+  .trynext { font-size: 14px; color: #6b6357; margin: 2px 0 2px; }
+  .addform { margin-top: 10px; display: none; }
+  .addform.show { display: block; }
+  .addform .row2 { display: flex; gap: 8px; margin-bottom: 8px; }
+  .addform .row2 input { flex: 1; }
+  .addbtn {
+    font: inherit; font-size: 16px; font-weight: 600; background: var(--deep); color: #fff;
+    border: none; border-radius: 11px; padding: 13px; cursor: pointer; width: 100%;
+  }
+
+  .amend-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .amend-row .chip { flex: 1 1 0; text-align: center; }
+  .amend-row .chip.not { flex-basis: 100%; order: 3; }
+  .amend-note { font-size: 14px; color: #6b6357; margin: 9px 0 0; line-height: 1.4; }
+  .chip.now[aria-pressed="true"]   { background: var(--now);  border-color: var(--now); }
+  .chip.later[aria-pressed="true"] { background: var(--later); border-color: var(--later); color:#3a2f10; }
+  .chip.not[aria-pressed="true"]   { background: var(--not);  border-color: var(--not); }
+
+  .actions { display: flex; gap: 10px; margin-top: 18px; }
+  button.primary {
+    flex: 1; font: inherit; font-size: 19px; font-weight: 600; background: var(--deep); color: #fff;
+    border: none; border-radius: 12px; padding: 15px; cursor: pointer;
+  }
+  button.primary:active { opacity: .85; }
+  button.ghost {
+    font: inherit; font-size: 16px; background: transparent; color: var(--accent-ink);
+    border: 1.5px solid var(--line); border-radius: 12px; padding: 15px 18px; cursor: pointer;
+  }
+
+  h2.section { font-size: 20px; color: var(--deep); margin: 26px 0 12px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+  h2.section:first-child { margin-top: 4px; }
+  .empty { color: #8a8272; font-style: italic; padding: 10px 2px; }
+
+  .entry {
+    background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--accent);
+    border-radius: 12px; padding: 13px 14px; box-shadow: var(--shadow); margin-bottom: 12px;
+  }
+  .entry.reviewed { border-left-color: var(--call); opacity: .72; }
+  .entry .time { font-size: 14px; color: #8a8272; margin-bottom: 5px; }
+  .entry .defects { display: flex; flex-wrap: wrap; gap: 6px; margin: 2px 0 6px; }
+  .entry .defects span { background: var(--chip); color: var(--deep); border-radius: 999px; padding: 3px 11px; font-size: 13.5px; font-weight: 600; }
+  .entry .what { font-size: 17px; color: var(--ink); margin: 2px 0 6px; white-space: pre-wrap; }
+  .entry .stepline { font-size: 14.5px; color: #4a5a40; margin: 4px 0; }
+  .entry .stepline b { color: var(--deep); }
+  .badge { display: inline-block; font-size: 12.5px; font-weight: 600; border-radius: 6px; padding: 2px 9px; color: #fff; margin-left: 4px; }
+  .badge.now { background: var(--now); } .badge.later { background: var(--later); color:#3a2f10; } .badge.not { background: var(--not); }
+  .entry .row-actions { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+  .entry .row-actions button {
+    font: inherit; font-size: 14px; font-weight: 600; border-radius: 9px; padding: 8px 13px; cursor: pointer;
+    border: 1.5px solid var(--line); background: #f4f1ea; color: var(--deep);
+  }
+  .entry .row-actions button.rev[aria-pressed="true"] { background: #e8f0e9; border-color: var(--call); color: var(--call); }
+  .entry .row-actions button.del { color: #b06a5f; }
+
+  footer.note { margin-top: 34px; font-size: 13.5px; color: #8a8272; text-align: center; line-height: 1.6; }
+  .saved-flash {
+    position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); background: var(--deep); color: #fff;
+    padding: 12px 20px; border-radius: 999px; font-size: 16px; box-shadow: 0 4px 14px rgba(0,0,0,.25);
+    opacity: 0; transition: opacity .25s; pointer-events: none; z-index: 30; text-align: center;
+  }
+  .saved-flash.show { opacity: 1; }
+  .view { display: none; }
+  .view.on { display: block; }
+
+  /* ---- reached-out choices (Step Two) ---- */
+  .reached-row { margin-top: 6px; }
+  .reached-row .chip { flex: 1 1 auto; text-align: center; }
+
+  /* ---- paged screens (installed app only; web stays a scrolling page) ---- */
+  .screen-nav { display: none; }
+  .screen-nav .nav-marker { flex: 1; text-align: center; font-size: 14px; color: #8a8272; }
+  /* In an installed app: one screen at a time, Next/Back paging, tabs along the bottom */
+  body.standalone .screen { display: none; }
+  body.standalone .screen.active { display: block; }
+  body.standalone .screen-nav {
+    display: flex; align-items: center; gap: 10px; margin: 4px 0 14px;
+  }
+  body.standalone .screen-nav #nav-next { flex: 1.4; }
+  body.standalone .screen-nav #nav-back { flex: 1; }
+  body.standalone .screen-nav [hidden] { display: none; }
+  body.standalone nav.tabs {
+    position: fixed; left: 0; right: 0; bottom: 0; margin: 0; z-index: 20;
+    background: var(--card); border-top: 1.5px solid var(--line); gap: 6px;
+    padding: 8px 12px calc(10px + env(safe-area-inset-bottom));
+    box-shadow: 0 -2px 12px rgba(35,48,58,.10);
+  }
+  body.standalone nav.tabs button { border-radius: 10px; }
+  body.standalone .wrap { padding-bottom: 104px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Spot Check Inventory</h1>
+    <p class="tag">Every time we are disturbed, there is something to look at.</p>
+  </header>
+
+  <nav class="tabs">
+    <button id="tab-check" aria-current="true">Spot Check</button>
+    <button id="tab-review">Tonight&rsquo;s Review <span class="count" id="review-count" hidden>0</span></button>
+    <button id="tab-history">History</button>
+  </nav>
+
+  <div class="banner" id="banner" hidden></div>
+
+  <!-- ============ SPOT CHECK VIEW ============ -->
+  <section class="view on" id="view-check">
+    <!-- Screen 1: what am I disturbed by -->
+    <div class="screen active" id="screen-1">
+      <div class="card">
+        <label class="field">What am I disturbed by?</label>
+        <p class="hint">Tap what has cropped up. We watch for these four.</p>
+        <div class="chips" id="defects"></div>
+
+        <label class="field" for="what">What happened? <span style="font-weight:400;color:#8a8272;">(one line, optional)</span></label>
+        <input type="text" id="what" placeholder="A few words are enough." autocomplete="off" />
+      </div>
+    </div>
+
+    <!-- Screen 2: Step One -->
+    <div class="screen" id="screen-2">
+      <div class="card step">
+        <p class="num">Step One</p>
+        <h3>Ask at once to have it removed.</h3>
+        <div class="prayer">Higher Power, I ask that this be removed from me now. I cannot carry it, and I do not have to.</div>
+        <button class="tick" id="tick-removed" aria-pressed="false"><span class="box">&#10003;</span> I have asked</button>
+      </div>
+    </div>
+
+    <!-- Screen 3: Step Two -->
+    <div class="screen" id="screen-3">
+      <div class="card step">
+        <p class="num">Step Two</p>
+        <h3>Discuss it with someone immediately.</h3>
+        <p class="hint">Do not sit with it alone. Reach one of your People now &mdash; call, or send a text.</p>
+        <div class="calllist" id="calllist"></div>
+        <p class="trynext" id="trynext" hidden>No answer? Try the next one.</p>
+        <div class="contact-admin">
+          <button id="add-contact">Add someone to call</button>
+          <button id="manage-contacts" hidden>Done editing</button>
+        </div>
+        <div class="addform" id="addform">
+          <div class="row2">
+            <input type="text" id="c-name" placeholder="Name" autocomplete="off" />
+            <input type="tel" id="c-phone" placeholder="Phone number" autocomplete="off" />
+          </div>
+          <button class="addbtn" id="save-contact">Save this person</button>
+        </div>
+        <p class="hint" style="margin-top:14px;">How did I reach out? Tap all that apply.</p>
+        <div class="chips reached-row" id="reached">
+          <div class="chip" role="button" tabindex="0" data-reached="spoke"   aria-pressed="false">Spoke with them</div>
+          <div class="chip" role="button" tabindex="0" data-reached="message" aria-pressed="false">Left a message</div>
+          <div class="chip" role="button" tabindex="0" data-reached="text"    aria-pressed="false">Sent a text</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen 4: Step Three -->
+    <div class="screen" id="screen-4">
+      <div class="card step">
+        <p class="num">Step Three</p>
+        <h3>Make amends quickly if we have harmed anyone.</h3>
+        <p class="hint">If someone was harmed, set it right. If not, say so and move on.</p>
+        <div class="chips amend-row" id="amend">
+          <div class="chip now"   role="button" tabindex="0" data-amend="now"   aria-pressed="false">Amend now</div>
+          <div class="chip later" role="button" tabindex="0" data-amend="later" aria-pressed="false">Amend later</div>
+          <div class="chip not"   role="button" tabindex="0" data-amend="not"   aria-pressed="false">Not needed &mdash; it stayed in my thinking; I did nothing to anyone</div>
+        </div>
+        <p class="amend-note">If it went past our thinking into words or actions, an amend is needed.</p>
+        <button class="tick" id="tick-amended" aria-pressed="false" style="margin-top:12px;"><span class="box">&#10003;</span> Addressed</button>
+      </div>
+    </div>
+
+    <!-- Screen 5: Step Four + Save -->
+    <div class="screen" id="screen-5">
+      <div class="card step">
+        <p class="num">Step Four</p>
+        <h3>Turn our thoughts to someone we can help.</h3>
+        <p class="hint">The surest way out of ourselves.</p>
+        <input type="text" id="help" placeholder="Someone I can help (optional)" autocomplete="off" />
+        <button class="tick" id="tick-helped" aria-pressed="false" style="margin-top:12px;"><span class="box">&#10003;</span> I have turned outward</button>
+      </div>
+
+      <div class="actions">
+        <button class="primary" id="save">Save this spot check</button>
+        <button class="ghost" id="clear">Clear</button>
+      </div>
+    </div>
+
+    <!-- paged navigation (installed app only; hidden on the web) -->
+    <div class="screen-nav" id="screen-nav">
+      <button class="ghost" id="nav-back" hidden>Back</button>
+      <span class="nav-marker" id="nav-marker">Screen 1 of 5</span>
+      <button class="primary" id="nav-next">Next</button>
+    </div>
+  </section>
+
+  <!-- ============ TONIGHT'S REVIEW VIEW ============ -->
+  <section class="view" id="view-review">
+    <h2 class="section">Tonight&rsquo;s Review</h2>
+    <p class="hint">Read back the day before it closes. The spot check was the bandage; the nightly review is where it heals. Tick each one as Reviewed.</p>
+    <div class="actions" style="margin-top:8px;margin-bottom:6px;">
+      <button class="ghost" id="copy-day" style="flex:1;">Copy today&rsquo;s spot checks</button>
+    </div>
+    <div id="review-today"></div>
+
+    <h2 class="section" id="review-earlier-head" hidden>Earlier &mdash; still to review</h2>
+    <div id="review-earlier"></div>
+
+    <h2 class="section" id="amends-head" hidden>Amends still open</h2>
+    <div id="amends-open"></div>
+  </section>
+
+  <!-- ============ HISTORY VIEW ============ -->
+  <section class="view" id="view-history">
+    <h2 class="section">History</h2>
+    <p class="hint">Every spot check, newest first.</p>
+    <div id="history-list"></div>
+  </section>
+
+  <footer class="note">
+    &ldquo;Nothing pays like restraint of tongue and pen.&rdquo;<br />
+    The Principles of this Step: Stewardship &middot; Perseverance.<br />
+    Everything you enter stays on this device only.
+  </footer>
+</div>
+
+<div class="saved-flash" id="flash">Saved</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var C_STORE = "spotcheck.contacts.v2";
+  var E_STORE = "spotcheck.entries.v2";
+  var DEFECTS = ["Selfishness", "Dishonesty", "Resentment", "Fear"];
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* ---------------- storage ---------------- */
+  function loadContacts() {
+    try { return JSON.parse(localStorage.getItem(C_STORE)) || []; } catch (e) { return []; }
+  }
+  function saveContacts(list) { localStorage.setItem(C_STORE, JSON.stringify(list)); }
+  function loadEntries() {
+    try { return JSON.parse(localStorage.getItem(E_STORE)) || []; } catch (e) { return []; }
+  }
+  function saveEntries(list) { localStorage.setItem(E_STORE, JSON.stringify(list)); }
+
+  function makeId() {
+    return String(new Date().getTime()) + "-" + Math.floor(Math.random() * 100000);
+  }
+
+  /* ---------------- phone / tel ---------------- */
+  // Strip everything except digits; keep a "+" (for international numbers).
+  function cleanNumber(raw) { return String(raw).replace(/[^\d+]/g, ""); }
+  function telHref(raw)  { return "tel:" + cleanNumber(raw); }
+  function smsHref(raw)  { return "sms:" + cleanNumber(raw); }
+
+  /* ---------------- dates ---------------- */
+  function sameDay(iso, ref) {
+    var d = new Date(iso), n = ref ? new Date(ref) : new Date();
+    return d.getFullYear() === n.getFullYear() && d.getMonth() === n.getMonth() && d.getDate() === n.getDate();
+  }
+  function fmtTime(iso) {
+    var d = new Date(iso), h = d.getHours(), m = d.getMinutes();
+    var ap = h < 12 ? "am" : "pm", hh = h % 12; if (hh === 0) { hh = 12; }
+    return hh + ":" + (m < 10 ? "0" + m : m) + ap;
+  }
+  function fmtDate(iso) {
+    var d = new Date(iso);
+    var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    var mons = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return days[d.getDay()] + " " + d.getDate() + " " + mons[d.getMonth()];
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+
+  /* ---------------- derived selectors ---------------- */
+  function unreviewed(list) { return (list || loadEntries()).filter(function (e) { return !e.reviewed; }); }
+  function openAmends(list) {
+    return (list || loadEntries()).filter(function (e) { return e.amend === "later" && !e.amendMade; });
+  }
+
+  /* ---------------- current working entry state ---------------- */
+  var cur;
+  function freshCur() {
+    return {
+      defects: {},
+      steps: { removed: false, discussed: false, amended: false, helped: false },
+      reached: {}, // how we discussed it: spoke / message / text (more than one may be true)
+      amend: null
+    };
+  }
+  cur = freshCur();
+
+  // How Step Two was carried out. Any one chosen counts Step Two as done.
+  var REACHED_LAB = { spoke: "Spoke with them", message: "Left a message", text: "Sent a text" };
+  var REACHED_ORDER = ["spoke", "message", "text"];
+
+  /* ---------------- installed-app vs web browser ----------------
+     Installed app (home-screen icon) -> one screen at a time, bottom tab bar.
+     Ordinary web browser -> the single scrolling page, top tabs (unchanged).
+     ?standalone=1 is a preview-only override so the phone mock-up can show
+     the installed-app mode inside an ordinary browser frame. */
+  function detectStandalone() {
+    try {
+      var s = (typeof location !== "undefined" && location.search) ? location.search : "";
+      if (/[?&]standalone=1(?:&|$)/.test(s)) { return true; }
+    } catch (e) {}
+    try { if (navigator && navigator.standalone === true) { return true; } } catch (e) {}
+    try {
+      if (typeof window !== "undefined" && window.matchMedia &&
+          window.matchMedia("(display-mode: standalone)").matches) { return true; }
+    } catch (e) {}
+    return false;
+  }
+  var STANDALONE = detectStandalone();
+
+  /* ---------------- defect chips ---------------- */
+  var defectsBox = $("defects");
+  DEFECTS.forEach(function (name) {
+    var c = document.createElement("div");
+    c.className = "chip"; c.setAttribute("role", "button"); c.setAttribute("tabindex", "0");
+    c.setAttribute("aria-pressed", "false"); c.textContent = name;
+    var toggle = function () {
+      var on = c.getAttribute("aria-pressed") === "true";
+      c.setAttribute("aria-pressed", on ? "false" : "true");
+      if (on) { delete cur.defects[name]; } else { cur.defects[name] = true; }
+    };
+    c.addEventListener("click", toggle);
+    c.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
+    defectsBox.appendChild(c);
+  });
+
+  /* ---------------- step tick buttons ---------------- */
+  function wireTick(id, key) {
+    var b = $(id);
+    b.addEventListener("click", function () {
+      var on = b.getAttribute("aria-pressed") === "true";
+      b.setAttribute("aria-pressed", on ? "false" : "true");
+      cur.steps[key] = !on;
+    });
+  }
+  wireTick("tick-removed", "removed");
+  wireTick("tick-amended", "amended");
+  wireTick("tick-helped", "helped");
+
+  /* ---------------- Step Two: how we reached out (multi-select chips) ---------------- */
+  var reachedChips = Array.prototype.slice.call($("reached").querySelectorAll(".chip"));
+  reachedChips.forEach(function (c) {
+    var toggle = function () {
+      var val = c.getAttribute("data-reached");
+      var on = c.getAttribute("aria-pressed") === "true";
+      c.setAttribute("aria-pressed", on ? "false" : "true");
+      if (on) { delete cur.reached[val]; } else { cur.reached[val] = true; }
+      // any way chosen counts Step Two (discuss it with someone immediately) as done
+      cur.steps.discussed = Object.keys(cur.reached).length > 0;
+    };
+    c.addEventListener("click", toggle);
+    c.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
+  });
+
+  /* ---------------- amend chips (single-select) ---------------- */
+  var amendChips = Array.prototype.slice.call($("amend").querySelectorAll(".chip"));
+  amendChips.forEach(function (c) {
+    var pick = function () {
+      var val = c.getAttribute("data-amend"), wasOn = cur.amend === val;
+      amendChips.forEach(function (x) { x.setAttribute("aria-pressed", "false"); });
+      if (wasOn) { cur.amend = null; } else { c.setAttribute("aria-pressed", "true"); cur.amend = val; }
+    };
+    c.addEventListener("click", pick);
+    c.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(); } });
+  });
+
+  /* ---------------- contacts (Step Two) ---------------- */
+  var editingId = null;
+
+  function renderContacts() {
+    var list = loadContacts(), box = $("calllist");
+    box.innerHTML = "";
+    $("trynext").hidden = list.length < 2;
+
+    if (list.length === 0) {
+      var p = document.createElement("p");
+      p.className = "empty";
+      p.textContent = "No one added yet. Add the People you call when you are disturbed.";
+      box.appendChild(p);
+    }
+
+    list.forEach(function (ct, i) {
+      var row = document.createElement("div");
+      row.className = "callrow";
+      var callHtml =
+        '<a class="call" href="' + telHref(ct.phone) + '">' +
+          esc(ct.name) + '<span class="pn">' + esc(ct.phone) + '</span>' +
+        '</a>' +
+        '<a class="sms" href="' + smsHref(ct.phone) + '"><span class="sms-ico">&#128172;</span>Text</a>';
+      row.innerHTML = callHtml;
+      box.appendChild(row);
+
+      var admin = document.createElement("div");
+      admin.className = "contact-admin";
+      admin.innerHTML =
+        '<div class="ctrls">' +
+          '<button class="up" data-i="' + i + '" ' + (i === 0 ? "disabled" : "") + ' aria-label="Move up">&#9650;</button>' +
+          '<button class="down" data-i="' + i + '" ' + (i === list.length - 1 ? "disabled" : "") + ' aria-label="Move down">&#9660;</button>' +
+        '</div>' +
+        '<button class="edit" data-id="' + ct.id + '">Edit</button>' +
+        '<button class="rm" data-id="' + ct.id + '">Remove</button>';
+      box.appendChild(admin);
+    });
+
+    // move up / down
+    Array.prototype.slice.call(box.querySelectorAll(".up, .down")).forEach(function (b) {
+      b.addEventListener("click", function () {
+        var i = parseInt(b.getAttribute("data-i"), 10);
+        var l = loadContacts();
+        var j = b.className.indexOf("up") === 0 ? i - 1 : i + 1;
+        if (j < 0 || j >= l.length) { return; }
+        var tmp = l[i]; l[i] = l[j]; l[j] = tmp;
+        saveContacts(l); renderContacts();
+      });
+    });
+    // edit
+    Array.prototype.slice.call(box.querySelectorAll(".edit")).forEach(function (b) {
+      b.addEventListener("click", function () {
+        var ct = loadContacts().filter(function (x) { return x.id === b.getAttribute("data-id"); })[0];
+        if (!ct) { return; }
+        editingId = ct.id;
+        $("c-name").value = ct.name; $("c-phone").value = ct.phone;
+        $("addform").classList.add("show");
+        $("c-name").focus();
+      });
+    });
+    // remove
+    Array.prototype.slice.call(box.querySelectorAll(".rm")).forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (!window.confirm("Remove this person from your call list?")) { return; }
+        saveContacts(loadContacts().filter(function (x) { return x.id !== b.getAttribute("data-id"); }));
+        renderContacts();
+      });
+    });
+  }
+
+  $("add-contact").addEventListener("click", function () {
+    editingId = null; $("c-name").value = ""; $("c-phone").value = "";
+    $("addform").classList.toggle("show");
+    if ($("addform").classList.contains("show")) { $("c-name").focus(); }
+  });
+
+  $("save-contact").addEventListener("click", function () {
+    var name = $("c-name").value.trim(), phone = $("c-phone").value.trim();
+    if (!name) { flash("A name is needed"); $("c-name").focus(); return; }
+    if (!cleanNumber(phone)) { flash("A phone number is needed"); $("c-phone").focus(); return; }
+    var l = loadContacts();
+    if (editingId) {
+      l = l.map(function (x) { return x.id === editingId ? { id: x.id, name: name, phone: phone } : x; });
+    } else {
+      l.push({ id: makeId(), name: name, phone: phone });
+    }
+    saveContacts(l);
+    editingId = null; $("c-name").value = ""; $("c-phone").value = "";
+    $("addform").classList.remove("show");
+    renderContacts();
+    flash("Saved");
+  });
+
+  /* ---------------- banner + review count ---------------- */
+  function renderBanner() {
+    var n = unreviewed().length, b = $("banner"), cnt = $("review-count");
+    if (n > 0) {
+      b.hidden = false;
+      b.innerHTML = "You have " + n + " spot check" + (n === 1 ? "" : "s") + " to review tonight." +
+        "<small>Tap to open Tonight&rsquo;s Review so they are not forgotten.</small>";
+      cnt.hidden = false; cnt.textContent = String(n);
+    } else {
+      b.hidden = true; cnt.hidden = true;
+    }
+  }
+  $("banner").addEventListener("click", function () { showView("review"); });
+
+  /* ---------------- entry rendering helpers ---------------- */
+  function defectsHtml(e) {
+    if (!e.defects || !e.defects.length) { return ""; }
+    return '<div class="defects">' + e.defects.map(function (d) { return "<span>" + esc(d) + "</span>"; }).join("") + "</div>";
+  }
+  // How Step Two was carried out. New entries carry e.reached (array of ways);
+  // old entries only have e.steps.discussed -> shown as the generic "Reached out".
+  function reachedWays(e) {
+    if (e.reached && e.reached.length) {
+      return REACHED_ORDER.filter(function (k) { return e.reached.indexOf(k) > -1; })
+        .map(function (k) { return REACHED_LAB[k]; });
+    }
+    if (e.steps && e.steps.discussed) { return ["Reached out"]; }
+    return [];
+  }
+  function stepsSummary(e) {
+    var s = e.steps || {}, done = [];
+    if (s.removed) { done.push("Asked"); }
+    if (s.amended) { done.push("Amends addressed"); }
+    if (s.helped) { done.push("Turned outward"); }
+    var ways = reachedWays(e);
+    var line = '<div class="stepline"><b>Steps done:</b> ' + (done.length ? done.join(" &middot; ") : "none yet") + "</div>";
+    if (ways.length) { line += '<div class="stepline"><b>Step Two:</b> ' + esc(ways.join(", ")) + "</div>"; }
+    if (e.amend) {
+      var lab = { now: "Amend &mdash; now", later: "Amend &mdash; later", not: "No amend &mdash; thinking only" };
+      var made = (e.amend === "later" && e.amendMade) ? " (made)" : "";
+      line += '<div class="stepline"><span class="badge ' + e.amend + '">' + lab[e.amend] + made + "</span></div>";
+    }
+    if (e.help) { line += '<div class="stepline"><b>Someone I can help:</b> ' + esc(e.help) + "</div>"; }
+    return line;
+  }
+  function entryCard(e, opts) {
+    opts = opts || {};
+    var div = document.createElement("div");
+    div.className = "entry" + (e.reviewed ? " reviewed" : "");
+    var head = '<div class="time">' + fmtTime(e.ts) + (opts.withDate ? " &middot; " + fmtDate(e.ts) : "") + "</div>";
+    var whatHtml = e.what ? '<p class="what">' + esc(e.what) + "</p>" : "";
+    var actions = '<div class="row-actions">';
+    if (opts.review) {
+      actions += '<button class="rev" data-id="' + e.id + '" aria-pressed="' + (e.reviewed ? "true" : "false") + '">' +
+        (e.reviewed ? "Reviewed ✓" : "Mark Reviewed") + "</button>";
+    }
+    actions += '<button class="del" data-id="' + e.id + '">Delete</button></div>';
+    div.innerHTML = head + defectsHtml(e) + whatHtml + stepsSummary(e) + actions;
+    return div;
+  }
+  function wireEntryActions(box) {
+    Array.prototype.slice.call(box.querySelectorAll(".rev")).forEach(function (b) {
+      b.addEventListener("click", function () {
+        var id = b.getAttribute("data-id");
+        saveEntries(loadEntries().map(function (e) { return e.id === id ? (e.reviewed = !e.reviewed, e) : e; }));
+        renderAll();
+      });
+    });
+    Array.prototype.slice.call(box.querySelectorAll(".del")).forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (!window.confirm("Delete this spot check?")) { return; }
+        saveEntries(loadEntries().filter(function (e) { return e.id !== b.getAttribute("data-id"); }));
+        renderAll();
+      });
+    });
+  }
+
+  /* ---------------- Tonight's Review ---------------- */
+  function renderReview() {
+    var all = loadEntries();
+    var sortDesc = function (a, b) { return b.ts < a.ts ? -1 : 1; };
+
+    var today = all.filter(function (e) { return sameDay(e.ts); }).sort(sortDesc);
+    var tbox = $("review-today"); tbox.innerHTML = "";
+    if (today.length === 0) {
+      var p = document.createElement("p"); p.className = "empty";
+      p.textContent = "No spot checks today. A quiet day is still worth a look.";
+      tbox.appendChild(p);
+    } else {
+      today.forEach(function (e) { tbox.appendChild(entryCard(e, { review: true })); });
+    }
+    wireEntryActions(tbox);
+
+    // earlier, still unreviewed — so the banner can always be cleared
+    var earlier = all.filter(function (e) { return !sameDay(e.ts) && !e.reviewed; }).sort(sortDesc);
+    var ebox = $("review-earlier"); ebox.innerHTML = "";
+    $("review-earlier-head").hidden = earlier.length === 0;
+    earlier.forEach(function (e) { ebox.appendChild(entryCard(e, { review: true, withDate: true })); });
+    wireEntryActions(ebox);
+
+    // amends still open
+    var open = openAmends(all).sort(sortDesc);
+    var abox = $("amends-open"); abox.innerHTML = "";
+    $("amends-head").hidden = open.length === 0;
+    open.forEach(function (e) {
+      var div = document.createElement("div");
+      div.className = "entry";
+      var head = '<div class="time">' + fmtTime(e.ts) + " &middot; " + fmtDate(e.ts) + "</div>";
+      div.innerHTML = head + defectsHtml(e) +
+        (e.what ? '<p class="what">' + esc(e.what) + "</p>" : "") +
+        '<div class="stepline"><b>Amend still to make.</b></div>' +
+        '<div class="row-actions"><button class="made" data-id="' + e.id + '">Mark amend made</button></div>';
+      abox.appendChild(div);
+    });
+    Array.prototype.slice.call(abox.querySelectorAll(".made")).forEach(function (b) {
+      b.addEventListener("click", function () {
+        var id = b.getAttribute("data-id");
+        saveEntries(loadEntries().map(function (e) { return e.id === id ? (e.amendMade = true, e) : e; }));
+        renderAll();
+        flash("Amend marked made");
+      });
+    });
+  }
+
+  /* ---------------- History ---------------- */
+  function renderHistory() {
+    var list = loadEntries().slice().sort(function (a, b) { return b.ts < a.ts ? -1 : 1; });
+    var box = $("history-list"); box.innerHTML = "";
+    if (list.length === 0) {
+      var p = document.createElement("p"); p.className = "empty";
+      p.textContent = "No spot checks saved yet.";
+      box.appendChild(p); return;
+    }
+    list.forEach(function (e) { box.appendChild(entryCard(e, { withDate: true })); });
+    wireEntryActions(box);
+  }
+
+  /* ---------------- copy today's spot checks ---------------- */
+  function buildCopyText(entries, ref) {
+    var today = (entries || loadEntries())
+      .filter(function (e) { return sameDay(e.ts, ref); })
+      .sort(function (a, b) { return a.ts < b.ts ? -1 : 1; });
+    if (today.length === 0) { return "No spot checks today."; }
+    var lines = ["Spot Check Inventory — " + fmtDate(today[0].ts), ""];
+    today.forEach(function (e, i) {
+      lines.push((i + 1) + ". " + fmtTime(e.ts));
+      if (e.defects && e.defects.length) { lines.push("   Disturbed by: " + e.defects.join(", ")); }
+      if (e.what) { lines.push("   What happened: " + e.what); }
+      var s = e.steps || {}, done = [];
+      if (s.removed) { done.push("asked to have it removed"); }
+      if (s.amended) { done.push("amends addressed"); }
+      if (s.helped) { done.push("turned to someone to help"); }
+      lines.push("   Steps done: " + (done.length ? done.join("; ") : "none yet"));
+      var ways = reachedWays(e);
+      if (ways.length) { lines.push("   Step Two: " + ways.join(", ")); }
+      if (e.amend === "now") { lines.push("   Amend: made now"); }
+      else if (e.amend === "later") { lines.push("   Amend: " + (e.amendMade ? "made" : "STILL OPEN — to make")); }
+      else if (e.amend === "not") { lines.push("   Amend: not needed — it stayed in my thinking"); }
+      if (e.help) { lines.push("   Someone I can help: " + e.help); }
+      lines.push("");
+    });
+    lines.push("“Nothing pays like restraint of tongue and pen.”  Stewardship · Perseverance");
+    return lines.join("\n");
+  }
+  $("copy-day").addEventListener("click", function () {
+    var text = buildCopyText();
+    var done = function () { flash("Copied today’s spot checks"); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () { legacyCopy(text, done); });
+    } else { legacyCopy(text, done); }
+  });
+  function legacyCopy(text, cb) {
+    try {
+      var ta = document.createElement("textarea");
+      ta.value = text; ta.setAttribute("readonly", "");
+      ta.style.position = "absolute"; ta.style.left = "-9999px";
+      document.body.appendChild(ta); ta.select();
+      document.execCommand("copy"); document.body.removeChild(ta);
+      cb();
+    } catch (e) { flash("Could not copy automatically"); }
+  }
+
+  /* ---------------- flash ---------------- */
+  var flashTimer;
+  function flash(msg) {
+    var f = $("flash"); f.textContent = msg; f.classList.add("show");
+    window.clearTimeout(flashTimer);
+    flashTimer = window.setTimeout(function () { f.classList.remove("show"); }, 1500);
+  }
+
+  /* ---------------- save spot check ---------------- */
+  function resetForm() {
+    $("what").value = ""; $("help").value = "";
+    cur = freshCur();
+    Array.prototype.slice.call(document.querySelectorAll("#defects .chip, #amend .chip, #reached .chip")).forEach(function (c) {
+      c.setAttribute("aria-pressed", "false");
+    });
+    ["tick-removed", "tick-amended", "tick-helped"].forEach(function (id) {
+      $(id).setAttribute("aria-pressed", "false");
+    });
+    if (STANDALONE) { showScreen(1); }
+  }
+
+  $("save").addEventListener("click", function () {
+    var defects = Object.keys(cur.defects);
+    var what = $("what").value.trim();
+    if (defects.length === 0 && !what) {
+      flash("Name what you are disturbed by first");
+      return;
+    }
+    var reached = REACHED_ORDER.filter(function (k) { return !!cur.reached[k]; });
+    var entry = {
+      id: makeId(),
+      ts: new Date().toISOString(),
+      defects: defects,
+      what: what,
+      steps: { removed: cur.steps.removed, discussed: reached.length > 0, amended: cur.steps.amended, helped: cur.steps.helped },
+      reached: reached,
+      amend: cur.amend,
+      amendMade: false,
+      help: $("help").value.trim(),
+      reviewed: false
+    };
+    var list = loadEntries(); list.push(entry); saveEntries(list);
+    resetForm(); renderAll();
+    flash("Saved — look at it again tonight");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+  $("clear").addEventListener("click", resetForm);
+
+  /* ---------------- paged screens (installed app) ---------------- */
+  var SCREENS = ["screen-1", "screen-2", "screen-3", "screen-4", "screen-5"];
+  var curScreen = 1;
+  function showScreen(n) {
+    if (n < 1) { n = 1; }
+    if (n > SCREENS.length) { n = SCREENS.length; }
+    curScreen = n;
+    SCREENS.forEach(function (id, i) { $(id).classList.toggle("active", (i + 1) === n); });
+    $("nav-back").hidden = (n === 1);
+    $("nav-next").hidden = (n === SCREENS.length); // last screen: the Save button takes over
+    $("nav-marker").textContent = "Screen " + n + " of " + SCREENS.length;
+    if (STANDALONE && window.scrollTo) { window.scrollTo({ top: 0, behavior: "auto" }); }
+  }
+  $("nav-next").addEventListener("click", function () { showScreen(curScreen + 1); });
+  $("nav-back").addEventListener("click", function () { showScreen(curScreen - 1); });
+
+  /* ---------------- views ---------------- */
+  function showView(which) {
+    var map = { check: "view-check", review: "view-review", history: "view-history" };
+    Object.keys(map).forEach(function (k) {
+      $(map[k]).classList.toggle("on", k === which);
+      $("tab-" + k).setAttribute("aria-current", k === which ? "true" : "false");
+    });
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }
+  $("tab-check").addEventListener("click", function () { showView("check"); });
+  $("tab-review").addEventListener("click", function () { showView("review"); });
+  $("tab-history").addEventListener("click", function () { showView("history"); });
+
+  /* ---------------- render everything ---------------- */
+  function renderAll() {
+    renderContacts();
+    renderBanner();
+    renderReview();
+    renderHistory();
+  }
+  renderAll();
+
+  /* ---------------- installed-app layout ---------------- */
+  if (STANDALONE) {
+    document.body.classList.add("standalone");
+    showScreen(1);
+  }
+
+  /* ---------------- test hook (no effect on the UI) ---------------- */
+  window.__spotcheck = {
+    C_STORE: C_STORE, E_STORE: E_STORE,
+    cleanNumber: cleanNumber, telHref: telHref, smsHref: smsHref,
+    loadContacts: loadContacts, saveContacts: saveContacts,
+    loadEntries: loadEntries, saveEntries: saveEntries,
+    unreviewed: unreviewed, openAmends: openAmends,
+    buildCopyText: buildCopyText,
+    reachedWays: reachedWays,
+    standalone: STANDALONE,
+    showScreen: showScreen,
+    curScreen: function () { return curScreen; },
+    screenCount: SCREENS.length,
+    renderAll: renderAll
+  };
+
+  /* ---------------- service worker (offline) ---------------- */
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("sw.js").catch(function () { /* offline still fine */ });
+    });
+  }
+})();
+</script>
+</body>
+</html>
