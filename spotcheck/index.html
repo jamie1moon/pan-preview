@@ -41,6 +41,7 @@
   }
   .wrap { max-width: 640px; margin: 0 auto; padding: 18px 16px 72px; }
   header h1 { font-size: 26px; margin: 2px 0 2px; color: var(--deep); letter-spacing: .2px; }
+  header p.today { margin: 1px 0 5px; font-size: 15px; font-weight: 600; color: var(--accent-ink); letter-spacing: .2px; }
   header p.tag { margin: 0 0 14px; font-size: 15.5px; color: var(--accent-ink); font-style: italic; opacity: .85; }
 
   /* ---- nav ---- */
@@ -231,6 +232,7 @@
 <div class="wrap">
   <header>
     <h1>Spot Check Inventory</h1>
+    <p class="today" id="today"></p>
     <p class="tag">Every time we are disturbed, there is something to look at.</p>
   </header>
 
@@ -411,6 +413,19 @@
     var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     var mons = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     return days[d.getDay()] + " " + d.getDate() + " " + mons[d.getMonth()];
+  }
+  // Today's date in full British words, e.g. "Thursday 15 October 2026".
+  // Read live each time so the header always shows the real day (never yesterday).
+  function fmtToday() {
+    var d = new Date();
+    var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    var mons = ["January", "February", "March", "April", "May", "June", "July",
+                "August", "September", "October", "November", "December"];
+    return days[d.getDay()] + " " + d.getDate() + " " + mons[d.getMonth()] + " " + d.getFullYear();
+  }
+  function renderToday() {
+    var el = $("today");
+    if (el) { el.textContent = fmtToday(); }
   }
   function esc(s) {
     return String(s).replace(/[&<>"]/g, function (c) {
@@ -869,12 +884,26 @@
 
   /* ---------------- render everything ---------------- */
   function renderAll() {
+    renderToday();
     renderContacts();
     renderBanner();
     renderReview();
     renderHistory();
   }
   renderAll();
+
+  /* ---------------- keep the header date current ----------------
+     Set on load (renderAll above). Refresh it whenever the person returns to
+     the app, so an installed app left open overnight never shows yesterday.
+     (Save already refreshes it: the save handler calls renderAll.) */
+  if (document.addEventListener) {
+    document.addEventListener("visibilitychange", function () {
+      if (!document.hidden) { renderToday(); }
+    });
+  }
+  if (window.addEventListener) {
+    window.addEventListener("focus", renderToday);
+  }
 
   /* ---------------- installed-app layout ---------------- */
   if (STANDALONE) {
@@ -891,6 +920,8 @@
     unreviewed: unreviewed, openAmends: openAmends,
     buildCopyText: buildCopyText,
     reachedWays: reachedWays,
+    fmtToday: fmtToday,
+    renderToday: renderToday,
     standalone: STANDALONE,
     showScreen: showScreen,
     curScreen: function () { return curScreen; },

@@ -1,6 +1,6 @@
 /* Spot-Check Inventory — offline app shell cache.
    Bump CACHE when any shell file changes so clients pick up the new version. */
-var CACHE = "spotcheck-shell-v4-screens";
+var CACHE = "spotcheck-shell-v5-date";
 var SHELL = [
   "index.html",
   "manifest.webmanifest",
