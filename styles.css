@@ -43,11 +43,12 @@ a:hover{color:var(--copper)}
   border-bottom:1px solid var(--rule);
   position:sticky;top:0;z-index:20;
 }
-.site-head .wrap{display:flex;align-items:center;gap:1.4rem;min-height:104px;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:.75rem;text-decoration:none;color:var(--ink);font-weight:600;
-  font-size:1.72rem;letter-spacing:.005em;margin-right:auto}
-.brand:hover{color:var(--ink)}
-.brand .mark{width:72px;height:72px;flex:0 0 72px}
+/* Lockup header (Jamie, 25 Oct 2026): logo on its own row at 640px, nav row beneath — the old site's layout */
+.site-head .wrap{display:block;padding-top:.9rem}
+.brand{display:block;width:640px;max-width:100%;text-decoration:none;color:var(--ink);margin:0 0 .35rem}
+.brand .lockup{display:block;width:100%;height:auto}
+.navrow{display:flex;align-items:center;gap:1.4rem;flex-wrap:wrap;padding:.3rem 0 .8rem}
+.navrow .btn{margin-left:auto}
 nav.main{display:flex;align-items:center;gap:1.35rem;font-family:var(--sans);font-size:.9rem;flex-wrap:wrap}
 nav.main a{color:var(--ink-soft);text-decoration:none}
 nav.main a:hover,nav.main a[aria-current]{color:var(--pine);text-decoration:underline}
@@ -196,17 +197,16 @@ footer.site-foot a:hover{text-decoration:underline}
   color:rgba(255,255,255,.70);margin:0 0 .9rem;font-weight:600}
 .foot-grid ul{list-style:none;margin:0;padding:0}
 .foot-grid li{margin-bottom:.5rem}
-.foot-brand{display:flex;align-items:center;gap:.85rem;color:#fff;font-weight:600;font-size:1.45rem;margin-bottom:.8rem}
-.foot-brand .mark{width:64px;height:64px;flex:0 0 64px}
+.foot-brand{margin-bottom:.8rem;max-width:380px}
+.foot-brand .lockup{display:block;width:100%;height:auto}
 .foot-bottom{border-top:1px solid rgba(255,255,255,.16);padding-top:1.5rem;
   display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-size:.88rem;color:rgba(255,255,255,.68)}
 
 @media (max-width:640px){
   body{font-size:18px}
   .hero .wrap{padding-top:3.6rem;padding-bottom:3.6rem}
-  .brand .mark{width:56px;height:56px;flex:0 0 56px}
-  .brand{font-size:1.35rem}
-  .site-head .wrap{min-height:84px}
+  .brand{margin-bottom:.2rem}
+  .navrow{padding-bottom:.6rem}
   .hero .glyph{opacity:.07}
   .card-meeting{margin-top:-2rem;padding:1.4rem}
   section{padding:3.4rem 0}
