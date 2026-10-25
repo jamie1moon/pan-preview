@@ -47,9 +47,9 @@ a:hover{color:var(--copper)}
 .site-head .wrap{display:block;padding-top:.9rem}
 .brand{display:block;width:640px;max-width:100%;text-decoration:none;color:var(--ink);margin:0 0 .35rem}
 .brand .lockup{display:block;width:100%;height:auto}
-.navrow{display:flex;align-items:center;gap:1.4rem;flex-wrap:wrap;padding:.3rem 0 .8rem}
-.navrow .btn{margin-left:auto}
-nav.main{display:flex;align-items:center;gap:1.35rem;font-family:var(--sans);font-size:.9rem;flex-wrap:wrap}
+.navrow{display:flex;align-items:center;justify-content:flex-end;gap:1.6rem;flex-wrap:wrap;padding:.3rem 0 .8rem}
+.navrow .btn{margin-left:.4rem}
+nav.main{display:flex;align-items:center;gap:1.5rem;font-family:var(--sans);font-size:1.05rem;flex-wrap:wrap;justify-content:flex-end}
 nav.main a{color:var(--ink-soft);text-decoration:none}
 nav.main a:hover,nav.main a[aria-current]{color:var(--pine);text-decoration:underline}
 
