@@ -45,7 +45,7 @@ a:hover{color:var(--copper)}
 }
 /* Lockup header (Jamie, 25 Oct 2026): logo on its own row at 640px, nav row beneath — the old site's layout */
 .site-head .wrap{display:block;padding-top:.9rem}
-.brand{display:block;width:640px;max-width:100%;text-decoration:none;color:var(--ink);margin:0 0 .35rem}
+.brand{display:block;width:720px;max-width:100%;text-decoration:none;color:var(--ink);margin:0 0 .35rem}
 .brand .lockup{display:block;width:100%;height:auto}
 .navrow{display:flex;align-items:center;justify-content:flex-end;gap:1.6rem;flex-wrap:wrap;padding:.3rem 0 .8rem}
 .navrow .btn{margin-left:.4rem}
@@ -197,7 +197,7 @@ footer.site-foot a:hover{text-decoration:underline}
   color:rgba(255,255,255,.70);margin:0 0 .9rem;font-weight:600}
 .foot-grid ul{list-style:none;margin:0;padding:0}
 .foot-grid li{margin-bottom:.5rem}
-.foot-brand{margin-bottom:.8rem;max-width:380px}
+.foot-brand{margin-bottom:1.6rem;width:520px;max-width:100%}
 .foot-brand .lockup{display:block;width:100%;height:auto}
 .foot-bottom{border-top:1px solid rgba(255,255,255,.16);padding-top:1.5rem;
   display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-size:.88rem;color:rgba(255,255,255,.68)}
