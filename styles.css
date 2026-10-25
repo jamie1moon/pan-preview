@@ -41,7 +41,7 @@ a:hover{color:var(--copper)}
 .site-head{
   background:var(--parchment);
   border-bottom:1px solid var(--rule);
-  position:sticky;top:0;z-index:20;
+  /* not sticky since the 640px lockup (25 Oct 2026): a 200px bar must not follow the reader */
 }
 /* Lockup header (Jamie, 25 Oct 2026): logo on its own row at 640px, nav row beneath — the old site's layout */
 .site-head .wrap{display:block;padding-top:.9rem}
