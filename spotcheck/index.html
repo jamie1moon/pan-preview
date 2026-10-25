@@ -169,14 +169,14 @@
 
   h2.section { font-size: 20px; color: var(--deep); margin: 26px 0 12px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
   h2.section:first-child { margin-top: 4px; }
-  .empty { color: #5c554a; font-style: italic; padding: 10px 2px; }
+  .empty { color: #423c33; font-style: italic; padding: 10px 2px; }
 
   .entry {
     background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--accent);
     border-radius: 12px; padding: 13px 14px; box-shadow: var(--shadow); margin-bottom: 12px;
   }
   .entry.reviewed { border-left-color: var(--call); opacity: .72; }
-  .entry .time { font-size: 14px; color: #5c554a; margin-bottom: 5px; }
+  .entry .time { font-size: 14px; color: #423c33; margin-bottom: 5px; }
   .entry .defects { display: flex; flex-wrap: wrap; gap: 6px; margin: 2px 0 6px; }
   .entry .defects span { background: var(--chip); color: var(--deep); border-radius: 999px; padding: 3px 11px; font-size: 13.5px; font-weight: 600; }
   .entry .what { font-size: 17px; color: var(--ink); margin: 2px 0 6px; white-space: pre-wrap; }
@@ -192,7 +192,7 @@
   .entry .row-actions button.rev[aria-pressed="true"] { background: #e8f0e9; border-color: var(--call); color: var(--call); }
   .entry .row-actions button.del { color: #b06a5f; }
 
-  footer.note { margin-top: 34px; font-size: 13.5px; color: #5c554a; text-align: center; line-height: 1.6; }
+  footer.note { margin-top: 34px; font-size: 13.5px; color: #423c33; text-align: center; line-height: 1.6; }
   .saved-flash {
     position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); background: var(--deep); color: #fff;
     padding: 12px 20px; border-radius: 999px; font-size: 16px; box-shadow: 0 4px 14px rgba(0,0,0,.25);
@@ -208,7 +208,7 @@
 
   /* ---- paged screens (installed app only; web stays a scrolling page) ---- */
   .screen-nav { display: none; }
-  .screen-nav .nav-marker { flex: 1; text-align: center; font-size: 14px; color: #5c554a; }
+  .screen-nav .nav-marker { flex: 1; text-align: center; font-size: 14px; color: #423c33; }
   /* In an installed app: one screen at a time, Next/Back paging, tabs along the bottom */
   body.standalone .screen { display: none; }
   body.standalone .screen.active { display: block; }
@@ -253,7 +253,7 @@
         <p class="hint">Tap what has cropped up. We watch for these four.</p>
         <div class="chips" id="defects"></div>
 
-        <label class="field" for="what">What happened? <span style="font-weight:400;color:#5c554a;">(one line, optional)</span></label>
+        <label class="field" for="what">What happened? <span style="font-weight:400;color:#423c33;">(one line, optional)</span></label>
         <input type="text" id="what" placeholder="A few words are enough." autocomplete="off" />
       </div>
     </div>
