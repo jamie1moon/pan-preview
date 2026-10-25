@@ -192,7 +192,10 @@ tbody tr:hover{background:var(--parchment-deep)}
 footer.site-foot{background:var(--pine-deep);color:rgba(255,255,255,.78);padding:3.4rem 0 2.6rem;font-size:.95rem}
 footer.site-foot a{color:#fff;text-decoration:none}
 footer.site-foot a:hover{text-decoration:underline}
-.foot-grid{display:grid;gap:2rem;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));margin-bottom:2.4rem}
+/* Three columns centred across the page, Reach us under the first (Jamie, 25 Oct 2026) */
+.foot-grid{display:grid;gap:3rem;grid-template-columns:repeat(3,minmax(0,16rem));justify-content:center;margin-bottom:2.4rem}
+.foot-grid > div > p:first-child{margin-top:0}
+@media (max-width:640px){.foot-grid{grid-template-columns:1fr;justify-content:start;gap:2rem}}
 .foot-grid h4{font-family:var(--sans);font-size:0.78rem;letter-spacing:.14em;text-transform:uppercase;
   color:rgba(255,255,255,.70);margin:0 0 .9rem;font-weight:600}
 .foot-grid ul{list-style:none;margin:0;padding:0}
