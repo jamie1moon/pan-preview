@@ -3,18 +3,18 @@
    Palette and type set once here; every page inherits. */
 
 :root{
-  --parchment:#D0DDD4;
-  --parchment-deep:#C3D3C8;
+  --parchment:#C4D3C9;
+  --parchment-deep:#B5C8BB;
   --ink:#1E2622;
-  --ink-soft:#3F4843;
-  --ink-faint:#3F4744;
-  --pine:#264D3F;
+  --ink-soft:#373F3A;
+  --ink-faint:#383F3D;
+  --pine:#214438;
   --pine-deep:#1C4034;
-  --pine-tint:#C9D7CF;
-  --copper:#254A5C;
+  --pine-tint:#BCCDC3;
+  --copper:#204151;
   --copper-soft:#DEE5E9;
-  --rule:#C3D2C8;
-  --card:#E0E7E2;
+  --rule:#B2C4B8;
+  --card:#D6DFD9;
   --measure:34rem;
   --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
   --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
