@@ -61,20 +61,12 @@
 <section>
   <div class="wrap">
     <!--
-      ================================================================
-      SINK / BACKEND: NOT WIRED YET. Staged for Jamie's release.
-      At deploy the action becomes:
-          action="https://formsubmit.co/jamie@hpretreats.org"
-      and Jamie clicks the one-time Formsubmit activation link (Rule 110;
-      Mailroom triages). Kept as a dead "#" so the page CANNOT send.
-      Pattern copied from sites/_staging_interest_form/.
-      ================================================================
+      BACKEND: the Pan download gate (Cloudflare Worker, route E — Jamie's ruling 28 Oct 2026;
+      wired by Cairn 2 Nov 2026). POST goes to the Worker, which emails the office the request
+      and emails the requester one-time links. No PDF is ever a public URL.
+      Build: Pan_Download_Gate_Cloudflare/ ; URL constant GATE_URL at the top of build.py.
     -->
-    <form class="drf" action="#" method="POST">
-      <input type="hidden" name="_subject" value="Pan useful materials: a request came in">
-      <input type="hidden" name="_captcha" value="false">
-      <input type="hidden" name="_template" value="table">
-      <input type="hidden" name="_next" value="download-thank-you.html">
+    <form class="drf" id="drf" action="https://pan-download-gate.hpretreats.workers.dev/request" method="POST">
 
       <div class="panel">
         <h3>Where to send them</h3>
@@ -87,8 +79,8 @@
         <label class="field" for="email">Your email <span class="req">(required, so we can send the download to you)</span></label>
         <input type="email" id="email" name="email" autocomplete="email" required>
 
-        <label class="field" for="phone">Your phone <span class="req">(required)</span></label>
-        <input type="tel" id="phone" name="phone" autocomplete="tel" required>
+        <label class="field" for="phone">Your phone <span class="req">(optional)</span></label>
+        <input type="tel" id="phone" name="phone" autocomplete="tel">
       </div>
 
       <div class="panel">
@@ -101,7 +93,6 @@
           <li><label><input type="checkbox" name="download" value="The Pan Twelve Steps"> The Pan Twelve Steps</label></li>
           <li><label><input type="checkbox" name="download" value="The Steps and the Twenty-Six Principles"> The Steps and the Twenty-Six Principles</label></li>
           <li><label><input type="checkbox" name="download" value="Preamble &amp; meeting format"> Preamble &amp; meeting format</label></li>
-          <li><label><input type="checkbox" name="download" value="Step-by-Step guide"> Step-by-Step guide</label></li>
         </ul>
         <h3 class="tick-group">Step work forms</h3>
         <ul class="ticks">
@@ -135,11 +126,26 @@
         <p style="font-size:1rem;color:var(--ink-soft);margin:0 0 1.4rem">This isn’t a membership
           sign-up and creates no public record. It’s a private request for something to be sent,
           nothing more.</p>
-        <button class="btn btn-primary" type="submit">Send my request</button>
+        <button class="btn btn-primary" id="drf-send" type="submit" disabled>Send my request</button>
       </div>
     </form>
   </div>
 </section>
+<script>
+/* Dead until valid (Jamie's design, 28 Oct 2026): the button wakes only when there is a name,
+   a shaped email, and at least one tick. Phone is optional. */
+(function(){
+  var f=document.getElementById('drf'),b=document.getElementById('drf-send');
+  if(!f||!b)return;
+  var em=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  function check(){
+    var ok=f.Name.value.trim().length>0 && em.test(f.email.value.trim()) &&
+           f.querySelectorAll('input[name=download]:checked').length>0;
+    b.disabled=!ok;
+  }
+  f.addEventListener('input',check); f.addEventListener('change',check); check();
+})();
+</script>
 
 <footer class="site-foot">
   <div class="wrap">
