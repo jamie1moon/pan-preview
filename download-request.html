@@ -80,8 +80,8 @@
         <label class="field" for="email">Your email <span class="req">(required, so we can send the download to you)</span></label>
         <input type="email" id="email" name="email" autocomplete="email" required>
 
-        <label class="field" for="phone">Your phone <span class="req">(optional)</span></label>
-        <input type="tel" id="phone" name="phone" autocomplete="tel">
+        <label class="field" for="phone">Your phone</label>
+        <input type="tel" id="phone" name="phone" autocomplete="tel" required>
       </div>
 
       <div class="panel">
@@ -134,13 +134,13 @@
 </section>
 <script>
 /* Dead until valid (Jamie's design, 28 Oct 2026): the button wakes only when there is a name,
-   a shaped email, and at least one tick. Phone is optional. */
+   a shaped email, a phone number, and at least one tick. Phone REQUIRED (Jamie, 7 Nov 2026). */
 (function(){
   var f=document.getElementById('drf'),b=document.getElementById('drf-send');
   if(!f||!b)return;
   var em=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   function check(){
-    var ok=f.Name.value.trim().length>0 && em.test(f.email.value.trim()) &&
+    var ok=f.Name.value.trim().length>0 && em.test(f.email.value.trim()) && f.phone.value.trim().length>0 &&
            f.querySelectorAll('input[name=download]:checked').length>0;
     b.disabled=!ok;
   }
