@@ -266,7 +266,7 @@
   .drf .ticks li{margin:0 0 .6rem}
   .drf .ticks label{display:flex;align-items:flex-start;gap:.7rem;cursor:pointer;
     font-size:1.02rem;line-height:1.4}
-  .drf .ticks input[type=checkbox]{margin-top:.28em;width:1.15em;height:1.15em;flex:0 0 auto;
+  .drf .ticks input[type=checkbox],.drf .ticks input[type=radio]{margin-top:.28em;width:1.15em;height:1.15em;flex:0 0 auto;
     accent-color:var(--pine)}
   .drf .privacy{background:var(--pine-tint);border-left:4px solid var(--pine);border-radius:8px;
     padding:1rem 1.2rem;font-size:1rem;color:var(--pine-deep);margin:1.6rem 0}
@@ -321,15 +321,16 @@
         <input type="tel" id="phone" name="phone" autocomplete="tel" required>
 
         <ul class="ticks" style="margin-top:1.2rem">
-          <li><label><input type="checkbox" name="events" value="yes"> Yes, let me know about Pan Fellowship
-            events: meetings, workshops and retreats. A few messages a year, and you can stop them any time.</label></li>
+          <li><label><input type="radio" name="events" value="yes"> Yes, it’s okay to get in touch with me
+            about Pan Fellowship events or other Twelve Step events. A few messages a year; stop them any time.</label></li>
+          <li><label><input type="radio" name="events" value="no"> No, I don’t want to be contacted.</label></li>
         </ul>
       </div>
 
       <div class="panel">
         <p class="privacy"><strong>In keeping with our tradition of anonymity, your details are
-          held in confidence.</strong> They’re used to send what you asked for and, if you tick the
-          box above, to tell you about Pan Fellowship events. They’re never published, never used
+          held in confidence.</strong> They’re used to send what you asked for and, only if you say
+          yes above, to tell you about Pan Fellowship and other Twelve Step events. They’re never published, never used
           to identify you as a member of any fellowship, and never passed to anyone else. Ask us
           and we’ll delete them.</p>
         <p style="font-size:1rem;color:var(--ink-soft);margin:0 0 1.4rem">This isn’t a membership
