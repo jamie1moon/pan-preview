@@ -24,13 +24,24 @@
       <a href="about.html">Why Pan</a>
       <a href="chairs.html">Chairs</a>
       <a href="store.html">Store</a>
-      <a href="download-request.html" aria-current="page">Free downloads</a>
+      <a href="store.html#downloads">Free downloads</a>
       <a href="contact.html">Contact</a>
       </nav>
       <a class="btn btn-primary" href="meetings.html">Join a meeting</a>
     </div>
   </div>
 </header>
+
+<div class="page-head">
+  <div class="wrap">
+    <h1>Ask us to send these to you</h1>
+    <p>Useful materials for meetings, etc. are free to anyone who wants them. Tell us who to
+       send them to, tick what you’d like, and we’ll get them to you.</p>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
 <style>
   /* Self-contained form styling, house tokens, no external fonts/CDNs/JS. */
   .drf{max-width:40rem}
@@ -51,43 +62,12 @@
     padding:1rem 1.2rem;font-size:1rem;color:var(--pine-deep);margin:1.6rem 0}
   .drf .privacy strong{color:var(--pine-deep)}
 </style>
-<div class="page-head">
-  <div class="wrap">
-    <h1>Ask us to send these to you</h1>
-    <p>Useful materials for meetings, etc. are free to anyone who wants them. Tell us who to
-       send them to, tick what you’d like, and we’ll get them to you.</p>
-  </div>
-</div>
-
-<section>
-  <div class="wrap">
-    <!--
-      BACKEND: the Pan download gate (Cloudflare Worker, route E — Jamie's ruling 28 Oct 2026;
-      wired by Cairn 2 Nov 2026). POST goes to the Worker, which emails the office the request
-      and emails the requester one-time links. No PDF is ever a public URL.
-      Build: Pan_Download_Gate_Cloudflare/ ; URL constant GATE_URL at the top of build.py.
-    -->
     <form class="drf" id="drf" action="https://pan-download-gate.hpretreats.workers.dev/request" method="POST">
 
       <div class="panel">
-        <h3>Where to send them</h3>
-        <p class="lead" style="font-size:1rem;margin:0 0 1.3rem">A first name, or first name and
-           last initial, is fine. No more than you’d give at a meeting.</p>
-
-        <label class="field" for="name">Your name <span class="req">(required)</span></label>
-        <input type="text" id="name" name="Name" autocomplete="name" required>
-
-        <label class="field" for="email">Your email <span class="req">(required, so we can send the download to you)</span></label>
-        <input type="email" id="email" name="email" autocomplete="email" required>
-
-        <label class="field" for="phone">Your phone</label>
-        <input type="tel" id="phone" name="phone" autocomplete="tel" required>
-      </div>
-
-      <div class="panel">
         <h3>Which would you like?</h3>
-        <p class="lead" style="font-size:1rem;margin:0 0 1.1rem">Tick as many as you’d like.
-           Everything here is free.</p>
+        <p class="lead" style="font-size:1rem;margin:0 0 1.1rem">Tick one, or tick as many as you’d like.
+           Everything here is free, and you get a link for each one you tick.</p>
         <h3 class="tick-group">Meeting materials</h3>
         <ul class="ticks">
           <li><label><input type="checkbox" name="download" value="The Pan Preamble"> The Pan Preamble</label></li>
@@ -117,6 +97,21 @@
       </div>
 
       <div class="panel">
+        <h3>Where to send them</h3>
+        <p class="lead" style="font-size:1rem;margin:0 0 1.3rem">A first name, or first name and
+           last initial, is fine. No more than you’d give at a meeting.</p>
+
+        <label class="field" for="name">Your name <span class="req">(required)</span></label>
+        <input type="text" id="name" name="Name" autocomplete="name" required>
+
+        <label class="field" for="email">Your email <span class="req">(required, so we can send the download to you)</span></label>
+        <input type="email" id="email" name="email" autocomplete="email" required>
+
+        <label class="field" for="phone">Your phone</label>
+        <input type="tel" id="phone" name="phone" autocomplete="tel" required>
+      </div>
+
+      <div class="panel">
         <p class="privacy"><strong>In keeping with our tradition of anonymity, your details are
           held in confidence.</strong> They’re used only to send what you asked for. They’re never
           published, never used to identify you as a member of any fellowship, and never added to
@@ -127,8 +122,6 @@
         <button class="btn btn-primary" id="drf-send" type="submit" disabled>Send my request</button>
       </div>
     </form>
-  </div>
-</section>
 <script>
 /* Dead until valid (Jamie's design, 28 Oct 2026): the button wakes only when there is a name,
    a shaped email, a phone number, and at least one tick. Phone REQUIRED (Jamie, 7 Nov 2026). */
